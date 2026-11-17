@@ -1,0 +1,68 @@
+@page "/products/edit/{id:int}"
+
+@inject ProductApiClient ProductApiClient
+@inject NavigationManager NavigationManager
+
+<h3>Edit Product</h3>
+
+@if (product == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="product" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="product.Name" />
+            <ValidationMessage For="@(() => product.Name)" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="product.Description" />
+            <ValidationMessage For="@(() => product.Description)" />
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price</label>
+            <InputNumber id="price" class="form-control" @bind-Value="product.Price" />
+            <ValidationMessage For="@(() => product.Price)" />
+        </div>
+
+        <div class="form-group">
+            <label for="stock">Stock</label>
+            <InputNumber id="stock" class="form-control" @bind-Value="product.Stock" />
+            <ValidationMessage For="@(() => product.Stock)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="NavigateToList">Cancel</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private ProductDto product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductApiClient.GetProductById(id);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await ProductApiClient.UpdateProduct(id, product);
+        NavigateToList();
+    }
+
+    private void NavigateToList()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}

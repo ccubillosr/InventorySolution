@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="InventoryBackend.Tests/InventoryBackend.Tests.csproj" />
+  <Project Path="InventoryBackend/InventoryBackend.csproj" />
+  <Project Path="InventoryDatabase/InventoryDatabase.sqlproj" />
+  <Project Path="InventoryFrontEnd/InventoryFrontEnd.csproj" />
+</Solution>

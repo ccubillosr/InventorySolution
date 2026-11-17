@@ -1,0 +1,3 @@
+D:\Capacitacion\Microsoft Full Stack Developer\Full Stack Integration\InventorySolution\InventoryDatabase\bin\Debug\net8.0\InventoryDatabase.deps.json
+D:\Capacitacion\Microsoft Full Stack Developer\Full Stack Integration\InventorySolution\InventoryDatabase\bin\Debug\net8.0\InventoryDatabase.dacpac
+D:\Capacitacion\Microsoft Full Stack Developer\Full Stack Integration\InventorySolution\InventoryDatabase\obj\Debug\net8.0\InventoryDatabase.dacpac

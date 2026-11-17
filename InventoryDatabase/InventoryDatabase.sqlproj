@@ -1,0 +1,16 @@
+<Project Sdk="MSBuild.Sdk.SqlProj/4.3.0">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <DatabaseName>InventoryDb</DatabaseName>
+    <SqlServerVersion>Sql150</SqlServerVersion>
+    <ProductVersion>1.0.0</ProductVersion>
+    <Authors>InventorySolution</Authors>
+    <Description>SQL Server database project for the InventoryDb database used by InventoryBackend.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PostDeploy Include="Scripts/PostDeploy.sql" />
+  </ItemGroup>
+
+</Project>

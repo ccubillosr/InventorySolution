@@ -1,0 +1,7 @@
+-- Executed after deployment. Intentionally left without seed data containing sensitive information.
+-- Add idempotent reference/seed data here if needed, e.g.:
+-- IF NOT EXISTS (SELECT 1 FROM [dbo].[Products] WHERE [Sku] = 'DEMO-001')
+-- BEGIN
+--     INSERT INTO [dbo].[Products] ([Name], [Sku], [Quantity], [UnitPrice])
+--     VALUES (N'Producto de ejemplo', N'DEMO-001', 10, 19.99);
+-- END

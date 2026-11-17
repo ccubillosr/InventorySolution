@@ -1,0 +1,126 @@
+@baseUrl = https://localhost:5001/api
+
+### ===== CATEGORIES =====
+
+### Get all categories
+GET {{baseUrl}}/categories
+
+### Get category by ID
+GET {{baseUrl}}/categories/1
+
+### Create category
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Electronics",
+  "description": "Electronic devices and gadgets"
+}
+
+### Update category
+PUT {{baseUrl}}/categories/1
+Content-Type: application/json
+
+{
+  "name": "Tech Products",
+  "description": "Updated description"
+}
+
+### Delete category
+DELETE {{baseUrl}}/categories/1
+
+### ===== PRODUCTS =====
+
+### Get all products
+GET {{baseUrl}}/products
+
+### Get product by ID
+GET {{baseUrl}}/products/1
+
+### Create product without category
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Laptop Pro",
+  "description": "High-performance laptop",
+  "sku": "LAPTOP-001",
+  "quantity": 10,
+  "unitPrice": 1299.99,
+  "categoryId": null
+}
+
+### Create product with category
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "description": "Ergonomic wireless mouse",
+  "sku": "MOUSE-001",
+  "quantity": 50,
+  "unitPrice": 29.99,
+  "categoryId": 1
+}
+
+### Update product
+PUT {{baseUrl}}/products/1
+Content-Type: application/json
+
+{
+  "name": "Laptop Pro Max",
+  "description": "Updated specs",
+  "sku": "LAPTOP-001",
+  "quantity": 15,
+  "unitPrice": 1499.99,
+  "categoryId": 1
+}
+
+### Delete product
+DELETE {{baseUrl}}/products/1
+
+### ===== STOCKS =====
+
+### Get all stocks
+GET {{baseUrl}}/stocks
+
+### Get stock by ID
+GET {{baseUrl}}/stocks/1
+
+### Get stocks by product ID
+GET {{baseUrl}}/stocks/product/1
+
+### Create stock
+POST {{baseUrl}}/stocks
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "warehouseLocation": "A1-Shelf-1",
+  "availableQuantity": 50,
+  "reservedQuantity": 10,
+  "minimumThreshold": 5,
+  "notes": "First warehouse location"
+}
+
+### Update stock
+PUT {{baseUrl}}/stocks/1
+Content-Type: application/json
+
+{
+  "availableQuantity": 75,
+  "reservedQuantity": 15,
+  "minimumThreshold": 10,
+  "notes": "Updated stock levels"
+}
+
+### Audit stock (update LastAuditedAt)
+POST {{baseUrl}}/stocks/1/audit
+
+### Delete stock
+DELETE {{baseUrl}}/stocks/1
+
+### ===== HEALTH CHECK =====
+
+### Check API health
+GET {{baseUrl}}/../health

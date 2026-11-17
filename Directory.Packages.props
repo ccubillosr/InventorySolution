@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Central Package Management for security and consistency -->
+  
+  <!-- Force latest secure versions of transitive dependencies -->
+  <ItemGroup>
+    <!-- System.Security.Cryptography.Pkcs: Update to 11.0.0 to fix CVE vulnerabilities -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
+  </ItemGroup>
+
+  <!-- ManagePackageVersionsCentrally is enabled in .NET 8+ by default when Directory.Packages.props exists -->
+</Project>

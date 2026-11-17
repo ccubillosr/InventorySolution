@@ -1,0 +1,3 @@
+Scripts\PostDeploy.sql
+Security\InventoryAppRole.sql
+Tables\Products.sql

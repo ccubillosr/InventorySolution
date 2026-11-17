@@ -1,0 +1,32 @@
+@inherits LayoutComponentBase
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4 auth">
+        <a href="authentication/login">Login</a>
+        <a href="authentication/register">Register</a>
+    </div>
+
+    @Body
+</div>
+
+<style>
+    .sidebar {
+        width: 250px;
+        float: left;
+    }
+
+    .main {
+        margin-left: 250px;
+        padding: 20px;
+    }
+
+    .top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>

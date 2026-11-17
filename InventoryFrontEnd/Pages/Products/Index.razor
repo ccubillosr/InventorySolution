@@ -1,0 +1,201 @@
+@page "/products"
+@using InventoryFrontEnd.Models
+@using InventoryFrontEnd.Services
+@inject IProductApiService ProductApi
+
+<PageTitle>Inventario</PageTitle>
+
+<h1>Control de Inventario</h1>
+
+@if (_errorMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">@_errorMessage</div>
+}
+
+@if (_successMessage is not null)
+{
+    <div class="alert alert-success" role="alert">@_successMessage</div>
+}
+
+<button class="btn btn-primary mb-3" @onclick="ShowCreateForm">Nuevo producto</button>
+
+@if (_showForm)
+{
+    <EditForm Model="_editModel" OnValidSubmit="HandleValidSubmit" class="card card-body mb-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2">
+            <label class="form-label">Nombre</label>
+            <InputText class="form-control" @bind-Value="_editModel.Name" maxlength="120" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Descripci&oacute;n</label>
+            <InputTextArea class="form-control" @bind-Value="_editModel.Description" maxlength="500" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">SKU</label>
+            <InputText class="form-control" @bind-Value="_editModel.Sku" maxlength="60" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Cantidad</label>
+            <InputNumber class="form-control" @bind-Value="_editModel.Quantity" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Precio unitario</label>
+            <InputNumber class="form-control" @bind-Value="_editModel.UnitPrice" />
+        </div>
+
+        <button type="submit" class="btn btn-success" disabled="@_isSaving">@(_editingId is null ? "Crear" : "Guardar")</button>
+        <button type="button" class="btn btn-secondary" @onclick="CancelForm">Cancelar</button>
+    </EditForm>
+}
+
+@if (_products is null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (_products.Count == 0)
+{
+    <p><em>No hay productos registrados.</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>SKU</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in _products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Sku</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.UnitPrice.ToString("C")</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" @onclick="() => ShowEditForm(product)">Editar</button>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteProduct(product.Id)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ProductDto>? _products;
+    private ProductEditModel _editModel = new();
+    private int? _editingId;
+    private bool _showForm;
+    private bool _isSaving;
+    private string? _errorMessage;
+    private string? _successMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProductsAsync();
+    }
+
+    private async Task LoadProductsAsync()
+    {
+        try
+        {
+            _products = await ProductApi.GetAllAsync();
+        }
+        catch (Exception)
+        {
+            _errorMessage = "No se pudo cargar la lista de productos.";
+            _products = new List<ProductDto>();
+        }
+    }
+
+    private void ShowCreateForm()
+    {
+        _editingId = null;
+        _editModel = new ProductEditModel();
+        _showForm = true;
+        _errorMessage = null;
+        _successMessage = null;
+    }
+
+    private void ShowEditForm(ProductDto product)
+    {
+        _editingId = product.Id;
+        _editModel = new ProductEditModel
+        {
+            Name = product.Name,
+            Description = product.Description,
+            Sku = product.Sku,
+            Quantity = product.Quantity,
+            UnitPrice = product.UnitPrice
+        };
+        _showForm = true;
+        _errorMessage = null;
+        _successMessage = null;
+    }
+
+    private void CancelForm()
+    {
+        _showForm = false;
+        _editingId = null;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        _isSaving = true;
+        _errorMessage = null;
+
+        if (_editingId is null)
+        {
+            var (success, error, _) = await ProductApi.CreateAsync(_editModel);
+            if (success)
+            {
+                _successMessage = "Producto creado correctamente.";
+                _showForm = false;
+                await LoadProductsAsync();
+            }
+            else
+            {
+                _errorMessage = error;
+            }
+        }
+        else
+        {
+            var (success, error) = await ProductApi.UpdateAsync(_editingId.Value, _editModel);
+            if (success)
+            {
+                _successMessage = "Producto actualizado correctamente.";
+                _showForm = false;
+                await LoadProductsAsync();
+            }
+            else
+            {
+                _errorMessage = error;
+            }
+        }
+
+        _isSaving = false;
+    }
+
+    private async Task DeleteProduct(int id)
+    {
+        _errorMessage = null;
+        var success = await ProductApi.DeleteAsync(id);
+        if (success)
+        {
+            _successMessage = "Producto eliminado correctamente.";
+            await LoadProductsAsync();
+        }
+        else
+        {
+            _errorMessage = "No se pudo eliminar el producto.";
+        }
+    }
+}
